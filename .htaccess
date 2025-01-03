@@ -1,0 +1,15 @@
+RewriteEngine On
+
+Options -Indexes
+
+# Block direct access to all PHP files 
+# RewriteCond %{THE_REQUEST} \s/([^,]+\.php)\s [NC]
+# RewriteRule ^(.*\.php)$ - [F,L]
+
+# Allow access to index.php 
+# RewriteRule ^index\.php$ - [L]
+
+# Redirect all other requests to index.php 
+RewriteCond %{REQUEST_FILENAME} !-f 
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule index.php [L]
