@@ -1,14 +1,26 @@
-RewriteEngine On
-
-Options -Indexes
-
-# Block direct access to all PHP files 
-RewriteCond %{THE_REQUEST} \s/([^,]+\.php)\s [NC]
-RewriteRule ^(.*\.php)$ - [F,L]
-
-# Redirect all other requests to index.php 
-RewriteCond %{REQUEST_FILENAME} !-f 
-RewriteCond %{REQUEST_FILENAME} !-d
-
-#Allow access to index.php 
-RewriteRule ^index\.php$ - [L]
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    
+    # Avoid listing a directory
+    Options -Indexes
+ 
+    # Remove access to the core folder
+    # core/ handles all the business logic
+    RewriteCond %{REQUEST_URI} ^core.*
+    RewriteRule ^(.*)$ /index.php?/$1 [L]
+ 
+    # Remove access to the web folder
+    # Contains all endpoints that clients can access
+    RewriteCond %{REQUEST_URI} ^web.*
+    RewriteRule ^(.*)$ /index.php?/$1 [L]
+ 
+    # if the user isnt attempting to access a valid file, image, js or css; send the request to index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?/$1 [L]
+</IfModule>
+# if mod_rewrite is not installed, redirect all
+<IfModule !mod_rewrite.c>
+    ErrorDocument 404 /index.php
+</IfModule>
