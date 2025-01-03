@@ -2,4 +2,4 @@
 <?php
 include_once __DIR__ . "/second.php";
 echo "chance!" . "<br />";
-?>
+echo "successfully set up";
